@@ -4,12 +4,13 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb,
 import { Link } from 'react-router-dom';
 import {LocalForm, Control, Errors } from 'react-redux-form';
 import {Loading} from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 function RenderDish({dish}){
     
     return (
         <Card>
-        <CardImg top src={dish.image} alt={dish.name} />
+        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
         <CardBody>
         <CardTitle>{dish.name}</CardTitle>
         <CardText>{dish.description}</CardText>
@@ -19,7 +20,7 @@ function RenderDish({dish}){
 }
 
 
-function RenderComments({comments, addComment, dishId}){
+function RenderComments({comments, postComment, dishId}){
     if (comments!=null){
         const commentList= comments.map((comment)=>{
             return (
@@ -34,7 +35,7 @@ function RenderComments({comments, addComment, dishId}){
         return (
             <div>
                 {commentList}
-                <CommentForm dishId={dishId} addComment={addComment}/>
+                <CommentForm dishId={dishId} postComment={postComment}/>
             </div>
         )
     }
@@ -71,7 +72,7 @@ class CommentForm extends React.Component{
 
     handleCommentFormSubmit(values){
         this.toggleCommentFormModal()
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment)
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment)
     }
     render(){
         return (
@@ -179,7 +180,7 @@ const DishDetail=(props)=>{
                 </div>
                 <div className="col-12 col-md-5 m-1">
                     <RenderComments comments={props.comments}
-                        addComment={props.addComment}
+                        postComment={props.postComment}
                         dishId={props.dish.id}
                     />
                 </div>
